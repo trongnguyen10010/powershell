@@ -1,7 +1,7 @@
 # Step 1 - install nxlog msi file using pdq deploy
 
-$source = "C:\Users\tnguyen\Desktop\prod_nxlog\"#C:\Users\tnguyen\Desktop\DR_Nxlog_Conf_Cert\"
-$prod_machines = $source+"test-list.txt"#prod-64bit-windows-system.txt"
+$source = "C:\Users\tnguyen\Desktop\prod_nxlog\"
+$prod_machines = $source+"test-list.txt"
 
 $prefix="\\"
 $cert_file = $source+"device.crt"
@@ -15,8 +15,7 @@ foreach ($pc in (Get-Content -path $prod_machines)) {
     $cert_file_path = $prefix+$pc+"`\"+$cert_file_location
     if (Test-Path -Path ($prefix+$pc+$installation_path)) {
         write-host -ForegroundColor green $pc
-        #copy config file
-	                                                                                        #write-host "src: " $log_config
+       
         try {
             write-host "Copying" $log_config_path
             Copy-Item -Path $log_config -Destination $log_config_path -ErrorAction Stop
@@ -26,9 +25,7 @@ foreach ($pc in (Get-Content -path $prod_machines)) {
         }
 
 
-        #copy cert
-	                                                                                        #write-host "src: " $cert_file
-	    try {    
+	try {    
             write-host "Copying" $cert_file_path		
             Copy-Item -Path $cert_file -Destination $cert_file_path -ErrorAction Stop
         }
@@ -37,8 +34,9 @@ foreach ($pc in (Get-Content -path $prod_machines)) {
         }
     
     
+    
         #restart nxlog service
-		try {
+	try {
 		$service = get-service -ComputerName $pc -Name nxlog -ErrorAction Stop
 		}
 		catch {
@@ -60,8 +58,9 @@ foreach ($pc in (Get-Content -path $prod_machines)) {
         }
 		write-host
     }
+        
     else {
-        Write-Host -ForegroundColor Red $pc ": please install nxlog"
+        Write-Host -ForegroundColor Red $pc ": please install nxlog using pdq deploy"
     }
 }
  
