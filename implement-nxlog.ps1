@@ -38,20 +38,21 @@ foreach ($pc in (Get-Content -path $prod_machines)) {
         #restart nxlog service
 	try {
 		$service = get-service -ComputerName $pc -Name nxlog -ErrorAction Stop
-		}
-		catch {
-			write-host -ForegroundColor red "error"
-		}
-		try {      
-			write-host "Stopping service"
-			$service.stop()
+	}
+	catch {
+		write-host -ForegroundColor red "error"
+	}
+	
+	try {      
+		write-host "Stopping service"
+		$service.stop()
         }
         catch {
             Write-Host -ForegroundColor red $pc ": cannot stop nxlog service" 
         }
-		try { 
-			write-host "Starting service"
-			$service.start()
+	try { 
+		write-host "Starting service"
+		$service.start()
         }
         catch {
             Write-Host -ForegroundColor red $pc ": cannot start nxlog service" 
@@ -63,4 +64,3 @@ foreach ($pc in (Get-Content -path $prod_machines)) {
         Write-Host -ForegroundColor Red $pc ": please install nxlog using pdq deploy"
     }
 }
- 
